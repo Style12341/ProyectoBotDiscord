@@ -14,5 +14,9 @@ client.on('message', message => {
         else if (message.content === `${prefix}server`) {
             message.channel.send(`En ${message.guild.name} hay ${message.guild.memberCount} miembros.`);
         }
+    if (message.content === `${prefix}groovy`) {
+        // send back "Pong." to the channel the message was sent in
+        message.channel.send('se la re come');
+    }
 });
 client.login(token);
