@@ -23,25 +23,25 @@ client.on('message', message => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/); // Crea una variable args, elimina el prefijo, elimina los espacios al inicio y al final ordena las strings en strings individuales en un array
     const commandName = args.shift().toLowerCase();                       // Crea una variable command, agarra el primer elemento de un array, lo devuelve y lo elimina para no tener el comando guardado en el array.
-
-    const command = client.commands.get(commandName)
+    const command = client.commands.get(commandName)                                      // Acorta la funcion de obtener el comando
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName)); // Verififica dentro de los comandos cuales son sus alias para chequear si se introducen
 	if (!command) return;                                                                 // Si el comando o alias no esta en la lista , vuelve.
-
+    // Condicional que avisa si faltan argumentos para el comando o si fue utilizado incorrectamente
     if (command.args  && !args.length) {
-        let reply = `No escribiste argumentos, ${message.author}!`; // Chequea si se escribieron argumentos y sino crea una variable reply con un aviso.
+        let reply = `No escribiste argumentos, ${message.author}!`;
         if (command.usage) {
-        reply += `\nEl comando se utiliza de la siguiente manera \`${prefix}${command.name} ${command.usage}\``; // Si el comando no fue utilizado correctamente se explica como hacerlo.
+        reply += `\nEl comando se utiliza de la siguiente manera \`${prefix}${command.name} ${command.usage}\``;
         }
         return message.channel.send(reply);
     }
+    // Condicional que le agrega un definicion de cooldown al comando si no lo tiene ya establecida
     if (!cooldowns.has(command.name)) {
         cooldowns.set(command.name, new Discord.Collection());
     }
     const now = Date.now();                                // Obtiene la marca de tiempo actual
     const timestamps = cooldowns.get(command.name);        // Obtiene la marca de tiempo de cooldown del comando utilizado
     const cooldownAmount = (command.cooldown || 3) * 1000; // Pone un cooldown default de 3 segundos y sino utiliza el preestablecido y lo convierte a segundos
-
+    // Condicional que verifica si el usuario ya puede reenviar el comando
     if (timestamps.has(message.author.id)) {                                       // Verifica si la coleccion timestamps tiene la ID del autor del mensaje
         const expirationTime = timestamps.get(message.author.id) + cooldownAmount; // Se obtiene la marca de tiempo del mensaje del autor y se le suma el cooldown
         if (now < expirationTime) {                                                // Verifica si ya expiro el tiempo verificandolo con el actual
@@ -51,6 +51,7 @@ client.on('message', message => {
     }
     timestamps.set(message.author.id, now);                                 // Setea la marca de tiempo del autor del mensaje a la actual
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount); // Elimina la marca de tiempo asociado con el autor del mensaje
+    // Ciclo try catch que ejecuta el comando ingresado y en caso de error le avisa al usuario
     try {
 	command.execute(message, args, commandName); // Utilizando la variable command y commandName obtiene el nombre del comando y lo ejecuta
     }
