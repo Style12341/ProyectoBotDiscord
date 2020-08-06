@@ -2,9 +2,10 @@ const fs = require('fs');              // Libreria File System de JS
 const Discord = require('discord.js'); // Libreria de Discord para JS
 
 const { prefix, token } = require('./config.json'); // Variables Predefinidas
-const client = new Discord.Client();                // Crea un nuevo cliente de discord
 
-client.commands = new Discord.Collection();                                             // Crea una nueva "coleccion" es un Map con funciones extras de la libreria de discord
+const client = new Discord.Client();                // Crea un nuevo cliente de discord
+client.commands = new Discord.Collection();         // Crea una nueva "coleccion" es un Map con funciones extras de la libreria de discord
+const cooldowns = new Discord.Collection();         //
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); // Pone el nombre de todos los archivos terminados en .js dentro de la carpeta /commands en un array
 
 for (const file of commandFiles) {                  // Por cada archivo en el array commandfiles se repite el ciclo.
@@ -23,14 +24,34 @@ client.on('message', message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/); // Crea una variable args, elimina el prefijo, elimina los espacios al inicio y al final ordena las strings en strings individuales en un array
     const commandName = args.shift().toLowerCase();                       // Crea una variable command, agarra el primer elemento de un array, lo devuelve y lo elimina para no tener el comando guardado en el array.
 
-    if (!client.commands.has(commandName)) return;
+    if (!client.commands.has(commandName)) return; // Si se introduce un comando que no esta en el Map de comandos , vuelve
     const command = client.commands.get(commandName);
 
     if (command.args  && !args.length) {
-        return message.channel.send(`No escribiste argumentos, ${message.author}!`);
-     }
+        let reply = `No escribiste argumentos, ${message.author}!`; // Chequea si se escribieron argumentos y sino crea una variable reply con un aviso.
+        if (command.usage) {
+        reply += `\nEl comando se utiliza de la siguiente manera \`${prefix}${command.name} ${command.usage}\``; // Si el comando no fue utilizado correctamente se explica como hacerlo.
+        }
+        return message.channel.send(reply);
+    }
+    if (!cooldowns.has(command.name)) {
+        cooldowns.set(command.name, new Discord.Collection());
+    }
+    const now = Date.now(); // Obtiene la marca de tiempo actual
+    const timestamps = cooldowns.get(command.name); // Obtiene la marca de tiempo de cooldown del comando utilizado
+    const cooldownAmount = (command.cooldown || 3) * 1000; // Pone un cooldown default de 3 segundos y sino utiliza el preestablecido y lo convierte a segundos
+
+    if (timestamps.has(message.author.id)) { // Verifica si la coleccion timestamps tiene la ID del autor del mensaje
+        const expirationTime = timestamps.get(message.author.id) + cooldownAmount; // Se obtiene la marca de tiempo del mensaje del autor y se le suma el cooldown
+        if (now < expirationTime) { // Verifica si ya expiro el tiempo verificandolo con el actual
+            const timeLeft = (expirationTime - now) / 1000; // Define la variable de tiempo restante
+            return message.reply(`Por favor espere ${timeLeft.toFixed(1)} segundos mas antes de utilizar el comando \`${command.name}\` `); // Avisa cuantos segundos, redondeado al entero faltan para volver a utilizar el comando
+        }
+    }
+    timestamps.set(message.author.id, now);
+    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
     try {
-	command.execute(message, args, commandName);
+	command.execute(message, args, commandName); // Utilizando la variable command y commandName obtiene el nombre del comando y lo ejecuta
     }
     catch (error) {
 	console.error(error);

@@ -1,8 +1,8 @@
 module.exports = {
-	name: 'sweep',
+    name: 'sweep',
 	execute(message, args) {
 		const amount = parseInt(args[0]) + 1; // Convierte la string de numero ingresada a un entero
-        if (isNaN(amount)) { // Verifica si es nu numero NaN= Not a Number
+        if (isNaN(amount)) {                  // Verifica si es nu numero NaN= Not a Number
             return message.reply(`No es un número válido`);
         }
         else if (amount <= 1 || amount > 100) {
