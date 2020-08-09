@@ -1,5 +1,5 @@
 module.exports = {
-	name: 'ping',
+	name: 'reload',
     description: 'Recarga un Comando',
     args: true,
 	execute(message, args) {
