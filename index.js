@@ -15,7 +15,7 @@ for (const file of commandFiles) {                  // Por cada archivo en el ar
 }
 
 client.once('ready', () => {
-    console.log('Ready!');
+    console.log('Listo!');
 });
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;                                                    // Si el mensaje no comienza con el prefijo , o lo escribio otro bot, lo ignora.
