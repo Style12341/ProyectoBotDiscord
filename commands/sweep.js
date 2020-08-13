@@ -1,5 +1,6 @@
 module.exports = {
     name: 'sweep',
+    cooldown: 1,
 	execute(message, args) {
         if (message.channel.type == 'text') {
 		const amount = parseInt(args[0]) + 1; // Convierte la string de numero ingresada a un entero
