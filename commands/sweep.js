@@ -1,6 +1,8 @@
 module.exports = {
     name: 'sweep',
+    cooldown: 1,
 	execute(message, args) {
+        if (message.channel.type == 'text') {
 		const amount = parseInt(args[0]) + 1; // Convierte la string de numero ingresada a un entero
         if (isNaN(amount)) {                  // Verifica si es nu numero NaN= Not a Number
             return message.reply(`No es un número válido`);
@@ -12,5 +14,6 @@ module.exports = {
         console.error(err);
         message.channel.send("Hubo un error limpiando los mensajes en este canal");
         });
+    }
     },
 };
