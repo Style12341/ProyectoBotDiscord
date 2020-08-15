@@ -8,13 +8,13 @@ function msToTime(duration) {
     seconds = (seconds < 10) ? "" + seconds : seconds;
     let display = "";
     if (hours !== "0") {
-        display += hours + " horas ";
+        display += hours + " hora(s) ";
     }
     if (minutes !== "0") {
-        display += minutes + " minutos ";
+        display += minutes + " minuto(s) ";
     }
     if (seconds !== "0") {
-        display += seconds + " segundos";
+        display += seconds + " segundo(s)";
     }
     return (display);
 }
