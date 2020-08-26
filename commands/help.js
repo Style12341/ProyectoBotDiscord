@@ -7,30 +7,35 @@ module.exports = {
     cooldown: 5,
     execute(message, args) {
         const data = [];
-        const { commands } = message.client;
-
-        if (!args.length) {
-            data.push('Aqui hay una lista de todos los comandos:');
-            data.push(commands.map(command => command.name).join(', '));
-            data.push(`\nPodes mandar \`${prefix}help [nombre del comando]\` para obtener información de ese comando en específico.`);
-
-            return message.reply(data, { split: true });
-                /* .then(() => {
-                    if (message.channel.type === 'dm') return;
-                    message.reply(`Te mande por privado una lista de mis comandos.`);
-                })
-                .catch(error => {
-                    console.error(`No se pudo manar un DM a ${message.author.tag}.\n`, error);
-                    message.reply('Parece ser que no te puedo mandar un mensaje. Probablemente lo tengas desactivado.');
-                });*/
+        const { commands } = message.client; // Obtiene la lista de comandos
+        const helpEmbed = { // Crea un embed inicial para mostrar la ayuda.
+            color: 0xff9900,
+            author: {
+                name: 'PanBot Help',
+                icon_url: 'https://i.imgur.com/NAMH0Db.jpg',
+            },
+            fields: [
+                {
+                    name: 'Lista de Comandos:',
+                    value: 'Some value here',
+                },
+            ],
+            footer: {
+                text: `Podes mandar \`${prefix}help [nombre del comando]\` para obtener información de ese comando en específico. Cantidad de comandos: ${commands.size}`,
+            },
+        };
+        if (!args.length) { // Si no se proporcionan argumentos entra al ciclo if que mandará el embed
+            data.push(commands.map(command => command.name).join('` `')); // Le asocia al array push los comandos separados por acentos graves para darle formate a las palabras
+            helpEmbed.fields[0].value = `\`${data}\``; // Se reemplaza el value del primer campo de texto con lo previamente guardado en el array data , con los acentos graves de inicio y final
+            return message.reply({ embed: helpEmbed }); // Envia el embed.
         }
-        const name = args[0].toLowerCase();
-        const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
+        const name = args[0].toLowerCase(); // convierte los argumentos a minusculas
+        const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name)); // Verifica si existe el comando con su nombre/alias para el cual se pidió ayuda.
 
-        if (!command) {
+        if (!command) { // Si el comando no existe le hace saber al usuario.
             return message.reply('No es un comando válido.');
         }
-
+        // Utilizando el array data se van introduciendo las respectivas propiedades del comando solicitado
         data.push(`**Nombre:** ${command.name}`);
 
         if (command.aliases) data.push(`**Alias:** ${command.aliases.join(', ')}`);

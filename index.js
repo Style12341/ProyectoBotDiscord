@@ -53,7 +53,8 @@ client.on('message', message => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount); // Elimina la marca de tiempo asociado con el autor del mensaje
     // Ciclo try catch que ejecuta el comando ingresado y en caso de error le avisa al usuario
     try {
-	command.execute(message, args, commandName); // Utilizando la variable command y commandName obtiene el nombre del comando y lo ejecuta
+    command.execute(message, args, commandName); // Utilizando la variable command y commandName obtiene el nombre del comando y lo ejecuta
+    message.react('👍');                         // Reacciona al mensaje del usuario
     }
     catch (error) {
 	console.error(error);
