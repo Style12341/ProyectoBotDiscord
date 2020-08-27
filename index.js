@@ -61,4 +61,4 @@ client.on('message', message => {
 	message.reply('Hubo un error al ejecutar ese comando');
     }
     }),
-client.login(token);
+client.login(process.env.BOT_TOKEN);
