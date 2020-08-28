@@ -10,6 +10,8 @@ module.exports = {
         const trim = (str, max) => ((str.length > max) ? `${str.slice(0, max - 3)}...` : str); // Funcion trim, que acepta una string y un maximo de caracteres, si esta sobrepasa este numero, corta la string hasta ese limite
         const { list } = await fetch(`https://api.urbandictionary.com/v0/define?${query}`).then(response => response.json()); // Crea una constante list que le pide a la API de urban su respectivo archivo JSON y lo guarda
         if (!list.length) { // Ciclo If que si la lista proporcionada por el archivo JSON no contiene ninguna respuesta le avisa al usuario
+                message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+                message.react('❌');
             return message.channel.send(`No se encontraron resultados para **${args.join(' ')}**.`);
         }
         const [answer] = list; // Asocia el primer objeto del array List a answer.

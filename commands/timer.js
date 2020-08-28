@@ -23,9 +23,9 @@ let timeoutStamp;
 let timerFinal;
 module.exports = {
     name: 'timer',
-    description: 'Permite poner un timer para X cantidad de minutos',
+    description: 'Permite poner un timer para X cantidad de horas minutos y segundos',
     args: true,
-    usage: '<hours>h <minutes>m <seconds>s',
+    usage: '<hours> h <minutes> m <seconds> s',
     execute(message, args) {
         let timer = 0;
         if (args[0] == "cancel") {

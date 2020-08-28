@@ -18,6 +18,8 @@ module.exports = {
 		}
 		catch (error) {
 			console.log(error);
+			message.reactions.removeAll();
+			message.react('❌');
 			message.channel.send(`Ha ocurrido un error recargando el comando \`${command.name}\`:\n\`${error.message}\``);
 		}
 	},
