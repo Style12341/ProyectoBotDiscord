@@ -33,6 +33,8 @@ module.exports = {
         const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name)); // Verifica si existe el comando con su nombre/alias para el cual se pidió ayuda.
 
         if (!command) { // Si el comando no existe le hace saber al usuario.
+            message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+            message.react('❌');
             return message.reply('No es un comando válido.');
         }
         // Utilizando el array data se van introduciendo las respectivas propiedades del comando solicitado
