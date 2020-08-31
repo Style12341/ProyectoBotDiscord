@@ -9,7 +9,7 @@ module.exports = {
 	async execute(message, args) {
         if(!args.length) {
             const tagList = await ksoft.images.tags();
-            console.log(tagList);
+            console.log(tagList[0]);
         }
 	},
 };
