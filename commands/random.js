@@ -1,11 +1,15 @@
-const api = 'https://jsonplaceholder.typicode.com/posts';
-const snekfetch = require('snekfetch');
+const api = 'https://api.ksoft.si/images/random-image';
+const { KSoftClient } = require('@ksoft/api');
+const { ksoftToken } = require ('../token.json');
+const ksoft = new KSoftClient(ksoftToken);
+const fetch = require('node-fetch'); // Requiere la libreria node fetch para trabajar con la API
 module.exports = {
 	name: 'random',
 	description: 'Devuelve una imagen aleatoria.',
 	async execute(message, args) {
-        const fetch = require('node-fetch'); // Requiere la libreria node fetch para trabajar con la API
-        console.log('test');
-        fetch(api, {method: 'GET'}
+        if(!args.length) {
+            const tagList = await ksoft.images.tags();
+            console.log(tagList);
+        }
 	},
 };
