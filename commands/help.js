@@ -7,39 +7,46 @@ module.exports = {
     cooldown: 5,
     execute(message, args) {
         const data = [];
+        const musicData = [];
         const { commands } = message.client; // Obtiene la lista de comandos
+        const { musicCommands } = message.client;
         const helpEmbed = { // Crea un embed inicial para mostrar la ayuda.
             color: 0xff9900,
+            title: 'Lista de comandos:',
             author: {
                 name: 'PanBot Help',
                 icon_url: 'https://i.imgur.com/NAMH0Db.jpg',
             },
             fields: [
                 {
-                    name: 'Lista de Comandos:',
+                    name: 'Comandos de uso general:',
+                    value: 'Some value here',
+                },
+                {
+                    name: 'Comandos de musica:',
                     value: 'Some value here',
                 },
             ],
             footer: {
-                text: `Podes mandar \`${prefix}help [nombre del comando]\` para obtener información de ese comando en específico. Cantidad de comandos: ${commands.size}`,
+                text: `Podes mandar \`${prefix}help [nombre del comando]\` para obtener información de ese comando en específico. Cantidad de comandos: ${commands.size + musicCommands.size}`,
             },
         };
         if (!args.length) { // Si no se proporcionan argumentos entra al ciclo if que mandará el embed
             data.push(commands.map(command => command.name).join('` `')); // Le asocia al array push los comandos separados por acentos graves para darle formate a las palabras
+            musicData.push(musicCommands.map(command => command.name).join('` `'));
             helpEmbed.fields[0].value = `\`${data}\``; // Se reemplaza el value del primer campo de texto con lo previamente guardado en el array data , con los acentos graves de inicio y final
+            helpEmbed.fields[1].value = `\`${musicData}\``;
             return message.reply({ embed: helpEmbed }); // Envia el embed.
         }
         const name = args[0].toLowerCase(); // convierte los argumentos a minusculas
-        const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name)); // Verifica si existe el comando con su nombre/alias para el cual se pidió ayuda.
+        const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name)) || musicCommands.get(name) || musicCommands.find(c => c.aliases && c.aliases.includes(name)); // Verifica si existe el comando con su nombre/alias para el cual se pidió ayuda.
 
         if (!command) { // Si el comando no existe le hace saber al usuario.
             message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
             message.react('❌');
             return message.reply('No es un comando válido.');
         }
-        // Utilizando el array data se van introduciendo las respectivas propiedades del comando solicitado
         data.push(`**Nombre:** ${command.name}`);
-
         if (command.aliases) data.push(`**Alias:** ${command.aliases.join(', ')}`);
         if (command.description) data.push(`**Descripción:** ${command.description}`);
         if (command.usage) data.push(`**Uso:** ${prefix}${command.name} ${command.usage}`);

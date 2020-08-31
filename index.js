@@ -6,14 +6,22 @@ const { token } = require ('./token.json');
 
 const client = new Discord.Client();                // Crea un nuevo cliente de discord
 client.commands = new Discord.Collection();         // Crea una nueva "coleccion" es un Map con funciones extras de la libreria de discord
+client.musicCommands = new Discord.Collection();
 const cooldowns = new Discord.Collection();         // Crea una coleccion para los cooldowns
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); // Pone el nombre de todos los archivos terminados en .js dentro de la carpeta /commands en un array
+const musicCommandFiles = fs.readdirSync('./commands/musicbot').filter(file=> file.endsWith('.js'));
 
 for (const file of commandFiles) {                  // Por cada archivo en el array commandfiles se repite el ciclo.
     const command = require(`./commands/${file}`);  // Le asigna a command el comando actual del ciclo.
 
     client.commands.set(command.name, command);     // Le asigna un nuevo nombre y valor en la collection con el command definido previamente.
 }
+for (const file of musicCommandFiles) {                  // Por cada archivo en el array commandfiles se repite el ciclo.
+    const command = require(`./commands/musicbot/${file}`);  // Le asigna a command el comando actual del ciclo.
+
+    client.musicCommands.set(command.name, command);     // Le asigna un nuevo nombre y valor en la collection con el command definido previamente.
+}
+
 
 client.once('ready', () => {
     console.log('Listo!');
@@ -25,7 +33,8 @@ client.on('message', message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/); // Crea una variable args, elimina el prefijo, elimina los espacios al inicio y al final ordena las strings en strings individuales en un array
     const commandName = args.shift().toLowerCase();                       // Crea una variable command, agarra el primer elemento de un array, lo devuelve y lo elimina para no tener el comando guardado en el array.
     const command = client.commands.get(commandName)                                      // Acorta la funcion de obtener el comando
-        || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName)); // Verififica dentro de los comandos cuales son sus alias para chequear si se introducen
+        || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName)) // Verififica dentro de los comandos cuales son sus alias para chequear si se introducen
+        || client.musicCommands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 	if (!command) return;                                                                 // Si el comando o alias no esta en la lista , vuelve.
     // Condicional que avisa si faltan argumentos para el comando o si fue utilizado incorrectamente
     if (command.args  && !args.length) {
