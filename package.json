@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/Style12341/ProyectoBotDiscord#readme",
   "dependencies": {
+    "@ksoft/api": "^3.1.9",
     "discord.js": "^12.2.0",
     "eslint": "^7.6.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "snekfetch": "^4.0.4"
   }
 }
