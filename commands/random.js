@@ -1,5 +1,5 @@
 const { KSoftClient } = require('@ksoft/api');
-const { ksoftToken } = require('../token.json');
+const ksoftToken = process.env.KSOFT_TOKEN;
 const ksoft = new KSoftClient(ksoftToken);
 const { prefix } = require('../config.json');
 module.exports = {
