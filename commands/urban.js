@@ -3,6 +3,7 @@ module.exports = {
     description: 'Busca en la base de datos de Urban Dictionary',
     usage: 'palabra a buscar en Urban Dictionary',
     args: true,
+    category: 'Images',
     async execute(message, args) {
         const fetch = require('node-fetch'); // Requiere la libreria node fetch para trabajar con la API
         const querystring = require('querystring'); // Requiere la libreria querystring para convertir argumentos en una string compatible para busqueda por URL

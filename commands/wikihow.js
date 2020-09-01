@@ -5,6 +5,7 @@ module.exports = {
     name: 'wikihow',
     description: 'Devuelve un articulo de wikihow',
     cooldown: 5,
+    category: 'Images',
     async execute(message) {
         const wikiH = await ksoft.images.wikihow();
         const wikihowEmbed = { // Crea un embed inicial para mostrar la ayuda.

@@ -5,6 +5,7 @@ module.exports = {
     name: 'meme',
     description: 'Devuelve un meme .',
     cooldown: 5,
+    category: 'Images',
     async execute(message) {
         const meme = await ksoft.images.meme();
         const memeEmbed = { // Crea un embed inicial para mostrar la ayuda.
