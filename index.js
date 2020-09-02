@@ -3,10 +3,13 @@ const Discord = require('discord.js'); // Libreria de Discord para JS
 
 const { prefix } = require('./config.json'); // Variables Predefinidas
 const { token } = require('./token.json'); // Variables Predefinidas
+const { Users, CurrencyShop } = require('./dbObjects');
+const { Op } = require('sequelize');
 
 const client = new Discord.Client();                // Crea un nuevo cliente de discord
 client.commands = new Discord.Collection();         // Crea una nueva "coleccion" es un Map con funciones extras de la libreria de discord
 const cooldowns = new Discord.Collection();         // Crea una coleccion para los cooldowns
+const currency = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); // Pone el nombre de todos los archivos terminados en .js dentro de la carpeta /commands en un array
 
 for (const file of commandFiles) {                  // Por cada archivo en el array commandfiles se repite el ciclo.
@@ -15,23 +18,46 @@ for (const file of commandFiles) {                  // Por cada archivo en el ar
     client.commands.set(command.name, command);     // Le asigna un nuevo nombre y valor en la collection con el command definido previamente.
 }
 
-client.once('ready', () => {
+Reflect.defineProperty(currency, 'add', {
+    value: async function add(id, amount) {
+        const user = currency.get(id);
+        if (user) {
+            user.balance += Number(amount);
+            return user.save();
+        }
+        const newUser = await Users.create({ user_id: id, balance: amount });
+        currency.set(id, newUser);
+        return newUser;
+    },
+});
+Reflect.defineProperty(currency, 'getBalance', {
+    /* eslint-disable-next-line func-name-matching */
+    value: function getBalance(id) {
+        const user = currency.get(id);
+        return user ? user.balance : 0;
+    },
+});
+module.exports = currency;
+client.once('ready', async () => {
+    const storedBalances = await Users.findAll();
+    storedBalances.forEach(b => currency.set(b.user_id, b));
     console.log('Listo!');
 });
-client.on('message', message => {
+client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;                                                    // Si el mensaje no comienza con el prefijo , o lo escribio otro bot, lo ignora.
+    currency.add(message.author.id, 1);
     if (message.content === prefix) return message.channel.send(`Hace falta un comando. ${message.author} Pedazo de Trolo!`); // Si se escribe el prefijo sin comando te avisa.
 
     const args = message.content.slice(prefix.length).trim().split(/ +/); // Crea una variable args, elimina el prefijo, elimina los espacios al inicio y al final ordena las strings en strings individuales en un array
     const commandName = args.shift().toLowerCase();                       // Crea una variable command, agarra el primer elemento de un array, lo devuelve y lo elimina para no tener el comando guardado en el array.
     const command = client.commands.get(commandName)                                      // Acorta la funcion de obtener el comando
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName)); // Verififica dentro de los comandos cuales son sus alias para chequear si se introducen
-	if (!command) return;                                                                 // Si el comando o alias no esta en la lista , vuelve.
+    if (!command) return;                                                                 // Si el comando o alias no esta en la lista , vuelve.
     // Condicional que avisa si faltan argumentos para el comando o si fue utilizado incorrectamente
-    if (command.args  && !args.length) {
+    if (command.args && !args.length) {
         let reply = `No escribiste argumentos, ${message.author}!`;
         if (command.usage) {
-        reply += `\nEl comando se utiliza de la siguiente manera \`${prefix}${command.name} ${command.usage}\``;
+            reply += `\nEl comando se utiliza de la siguiente manera \`${prefix}${command.name} ${command.usage}\``;
         }
         return message.channel.send(reply);
     }
@@ -54,14 +80,14 @@ client.on('message', message => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount); // Elimina la marca de tiempo asociado con el autor del mensaje
     // Ciclo try catch que ejecuta el comando ingresado y en caso de error le avisa al usuario
     try {
-    message.react('👍');// Reacciona al mensaje del usuario
-    command.execute(message, args, commandName); // Utilizando la variable command y commandName obtiene el nombre del comando y lo ejecuta
+        message.react('👍');// Reacciona al mensaje del usuario
+        command.execute(message, args, commandName); // Utilizando la variable command y commandName obtiene el nombre del comando y lo ejecuta
     }
     catch (error) {
-    console.error(error);
-    message.reactions.removeAll();
-    message.react('❌');
-	message.reply('Hubo un error al ejecutar ese comando');
+        console.error(error);
+        message.reactions.removeAll();
+        message.react('❌');
+        message.reply('Hubo un error al ejecutar ese comando');
     }
-    }),
-client.login(token);
+}),
+    client.login(token);
