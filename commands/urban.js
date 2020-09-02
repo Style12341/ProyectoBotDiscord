@@ -37,6 +37,9 @@ module.exports = {
                     value: `${answer.thumbs_up} thumbs up. ${answer.thumbs_down} thumbs down.`,
                 },
             ],
+            footer: {
+                text: 'Powered by KSoft.Si.',
+            },
         };
         return message.channel.send({ embed : embedUrban });
     },

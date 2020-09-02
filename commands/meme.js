@@ -16,7 +16,7 @@ module.exports = {
                 url: meme.url,
             },
             footer: {
-                text: `${meme.post.subreddit} | 👍 ${meme.post.upvotes} | 👎 ${meme.post.downvotes} | 💬 ${meme.post.comments}`,
+                text: `${meme.post.subreddit} | 👍 ${meme.post.upvotes} | 👎 ${meme.post.downvotes} | 💬 ${meme.post.comments} \n Powered by KSoft.Si.`,
             },
         };
         message.channel.send({ embed: memeEmbed });

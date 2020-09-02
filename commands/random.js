@@ -22,7 +22,7 @@ module.exports = {
                 },
             ],
             footer: {
-                text: `Utilize ${prefix}random <tag>`,
+                text: `Utilize ${prefix}random <tag> \n Powered by KSoft.Si.`,
             },
         };
         if (!args.length) {
