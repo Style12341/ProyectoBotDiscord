@@ -2,6 +2,7 @@ const { KSoftClient } = require('@ksoft/api');
 const { ksoftToken } = require('../token.json');
 const ksoft = new KSoftClient(ksoftToken);
 const { prefix } = require('../config.json');
+const Discord = require('discord.js');
 module.exports = {
     name: 'random',
     description: 'Devuelve una imagen aleatoria.',
@@ -42,7 +43,11 @@ module.exports = {
         }
         try {
             const image = await ksoft.images.random(args[0], { nsfw: false });
-            message.channel.send(image.url);
+            const imageEmbed = new Discord.MessageEmbed();
+            imageEmbed.setImage(image.url);
+            imageEmbed.setFooter('Powered by KSoft.Si.');
+            imageEmbed.setColor('0xff9900');
+            message.channel.send(imageEmbed);
         }
         catch (error) {
             console.error("Hubo un error");
