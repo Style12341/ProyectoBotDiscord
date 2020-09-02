@@ -7,6 +7,7 @@ module.exports = {
     cooldown: 5,
     execute(message, args) {
         const data = [];
+        const dataImages = [];
         const { commands } = message.client; // Obtiene la lista de comandos
         const helpEmbed = { // Crea un embed inicial para mostrar la ayuda.
             color: 0xff9900,
@@ -14,9 +15,14 @@ module.exports = {
                 name: 'PanBot Help',
                 icon_url: 'https://i.imgur.com/NAMH0Db.jpg',
             },
+            title: "Lista de Comandos:",
             fields: [
                 {
-                    name: 'Lista de Comandos:',
+                    name: 'Comandos de uso general:',
+                    value: 'Some value here',
+                },
+                {
+                    name: 'Comandos de Imagenes:',
                     value: 'Some value here',
                 },
             ],
@@ -25,7 +31,15 @@ module.exports = {
             },
         };
         if (!args.length) { // Si no se proporcionan argumentos entra al ciclo if que mandará el embed
-            data.push(commands.map(command => command.name).join('` `')); // Le asocia al array push los comandos separados por acentos graves para darle formate a las palabras
+            for (const command of commands) {
+                if (`${command.category}` == 'Images') {
+                    dataImages.push(command.name);
+                    console.log(command);
+                }
+            }
+            console.log(commands.urban.category);
+            console.log(dataImages);
+            data.push(commands.map(command => command.name).join('` `')); // Le asocia al array data los comandos separados por acentos graves para darle formate a las palabras
             helpEmbed.fields[0].value = `\`${data}\``; // Se reemplaza el value del primer campo de texto con lo previamente guardado en el array data , con los acentos graves de inicio y final
             return message.reply({ embed: helpEmbed }); // Envia el embed.
         }

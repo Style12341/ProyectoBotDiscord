@@ -7,6 +7,7 @@ module.exports = {
     description: 'Devuelve una imagen aleatoria.',
     usage: '<tag>',
     cooldown: 5,
+    category: 'Images',
     async execute(message, args) {
         const tagEmbed = { // Crea un embed inicial para mostrar la ayuda.
             color: 0xff9900,
@@ -21,7 +22,7 @@ module.exports = {
                 },
             ],
             footer: {
-                text: `Utilize ${prefix}random <tag>`,
+                text: `Utilize ${prefix}random <tag> \n Powered by KSoft.Si.`,
             },
         };
         if (!args.length) {
