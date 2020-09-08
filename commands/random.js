@@ -1,8 +1,8 @@
 const { KSoftClient } = require('@ksoft/api');
-const { ksoftToken } = require('../token.json');
+const Discord = require('discord.js');
+const ksoftToken = process.env.KSOFT_TOKEN;
 const ksoft = new KSoftClient(ksoftToken);
 const { prefix } = require('../config.json');
-const Discord = require('discord.js');
 module.exports = {
     name: 'random',
     description: 'Devuelve una imagen aleatoria.',
@@ -24,6 +24,7 @@ module.exports = {
             ],
             footer: {
                 text: `Utilize ${prefix}random <tag> \n Powered by KSoft.Si.`,
+                text: `Utilize ${prefix}random <tag>`,
             },
         };
         if (!args.length) {
@@ -48,6 +49,7 @@ module.exports = {
             imageEmbed.setFooter('Powered by KSoft.Si.');
             imageEmbed.setColor('0xff9900');
             message.channel.send(imageEmbed);
+            message.channel.send(image.url);
         }
         catch (error) {
             console.error("Hubo un error");
