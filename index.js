@@ -2,7 +2,7 @@ const fs = require('fs');              // Libreria File System de JS
 const Discord = require('discord.js'); // Libreria de Discord para JS
 
 const { prefix } = require('./config.json'); // Variables Predefinidas
-const { token } = require('./token.json'); // Variables Predefinidas
+const token = process.env.TOKEN; // Variables Predefinidas
 
 const client = new Discord.Client();                // Crea un nuevo cliente de discord
 client.commands = new Discord.Collection();         // Crea una nueva "coleccion" es un Map con funciones extras de la libreria de discord
