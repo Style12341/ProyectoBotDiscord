@@ -21,10 +21,6 @@ module.exports = {
                     name: 'Comandos de uso general:',
                     value: 'Some value here',
                 },
-                {
-                    name: 'Comandos de Imagenes:',
-                    value: 'Some value here',
-                },
             ],
             footer: {
                 text: `Podes mandar \`${prefix}help [nombre del comando]\` para obtener información de ese comando en específico. Cantidad de comandos: ${commands.size}`,
