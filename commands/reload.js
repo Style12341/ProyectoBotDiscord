@@ -14,7 +14,7 @@ module.exports = {
 		try {
 			const newCommand = require(`./${command.name}.js`);        // Se le asigna a newCommand el archivo del comando recargado
 			message.client.commands.set(newCommand.name, newCommand);  // Setea el comando nuevo
-			message.reply(`Se ha restablecido el comando ${command.name}`);
+			message.reply(`Se ha restablecido el comando ${command.name}.`);
 		}
 		catch (error) {
 			console.log(error);
