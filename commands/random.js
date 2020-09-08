@@ -49,7 +49,6 @@ module.exports = {
             imageEmbed.setFooter('Powered by KSoft.Si.');
             imageEmbed.setColor('0xff9900');
             message.channel.send(imageEmbed);
-            message.channel.send(image.url);
         }
         catch (error) {
             console.error("Hubo un error");
