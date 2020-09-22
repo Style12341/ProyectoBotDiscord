@@ -26,7 +26,7 @@ client.on('message', message => {
     const command = client.commands.get(commandName)                                      // Acorta la funcion de obtener el comando
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName)); // Verififica dentro de los comandos cuales son sus alias para chequear si se introducen
 	if (!command) {
-        message.channel.send("No es un comando valido");
+        message.reply("No es un comando valido");
         return ;
     } ;                                                                 // Si el comando o alias no esta en la lista , vuelve.
     // Condicional que avisa si faltan argumentos para el comando o si fue utilizado incorrectamente
