@@ -1,4 +1,5 @@
 const { KSoftClient } = require('@ksoft/api');
+const Discord = require('discord.js');
 const ksoftToken = process.env.KSOFT_TOKEN;
 const ksoft = new KSoftClient(ksoftToken);
 const { prefix } = require('../config.json');
@@ -7,6 +8,7 @@ module.exports = {
     description: 'Devuelve una imagen aleatoria.',
     usage: '<tag>',
     cooldown: 5,
+    category: 'Images',
     async execute(message, args) {
         const tagEmbed = { // Crea un embed inicial para mostrar la ayuda.
             color: 0xff9900,
@@ -21,6 +23,7 @@ module.exports = {
                 },
             ],
             footer: {
+                text: `Utilize ${prefix}random <tag> \n Powered by KSoft.Si.`,
                 text: `Utilize ${prefix}random <tag>`,
             },
         };
@@ -41,7 +44,11 @@ module.exports = {
         }
         try {
             const image = await ksoft.images.random(args[0], { nsfw: false });
-            message.channel.send(image.url);
+            const imageEmbed = new Discord.MessageEmbed();
+            imageEmbed.setImage(image.url);
+            imageEmbed.setFooter('Powered by KSoft.Si.');
+            imageEmbed.setColor('0xff9900');
+            message.channel.send(imageEmbed);
         }
         catch (error) {
             console.error("Hubo un error");

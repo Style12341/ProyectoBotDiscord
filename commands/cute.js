@@ -1,10 +1,14 @@
 const { KSoftClient } = require('@ksoft/api');
+
 const ksoftToken = process.env.KSOFT_TOKEN;
+
 const ksoft = new KSoftClient(ksoftToken);
 module.exports = {
     name: 'cute',
     description: 'Devuelve un imagen adorable.',
     cooldown: 5,
+    category: 'Images',
+
     async execute(message) {
         const aww = await ksoft.images.aww();
         const memeEmbed = { // Crea un embed inicial para mostrar la ayuda.
