@@ -29,7 +29,7 @@ client.on('message', message => {
 	if (!command) {
         message.reply("No es un comando valido");
         return ;
-    } ;                                                                 // Si el comando o alias no esta en la lista , vuelve.
+    }                                                   // Si el comando o alias no esta en la lista , vuelve.
     // Condicional que avisa si faltan argumentos para el comando o si fue utilizado incorrectamente
     if (command.args  && !args.length) {
         let reply = `No escribiste argumentos, ${message.author}!`;
