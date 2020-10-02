@@ -1,7 +1,8 @@
 const fs = require('fs');              // Libreria File System de JS
 const Discord = require('discord.js'); // Libreria de Discord para JS
 
-const { prefix, token } = require('./config.json'); // Variables Predefinidas
+const { prefix } = require('./config.json'); // Variables Predefinidas
+const { token } = require('./token.json'); // Variables Predefinidas
 
 const client = new Discord.Client();                // Crea un nuevo cliente de discord
 client.commands = new Discord.Collection();         // Crea una nueva "coleccion" es un Map con funciones extras de la libreria de discord
@@ -15,7 +16,7 @@ for (const file of commandFiles) {                  // Por cada archivo en el ar
 }
 
 client.once('ready', () => {
-    console.log('Ready!');
+    console.log('Listo!');
 });
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;                                                    // Si el mensaje no comienza con el prefijo , o lo escribio otro bot, lo ignora.
@@ -53,10 +54,13 @@ client.on('message', message => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount); // Elimina la marca de tiempo asociado con el autor del mensaje
     // Ciclo try catch que ejecuta el comando ingresado y en caso de error le avisa al usuario
     try {
-	command.execute(message, args, commandName); // Utilizando la variable command y commandName obtiene el nombre del comando y lo ejecuta
+    message.react('👍');// Reacciona al mensaje del usuario
+    command.execute(message, args, commandName); // Utilizando la variable command y commandName obtiene el nombre del comando y lo ejecuta
     }
     catch (error) {
-	console.error(error);
+    console.error(error);
+    message.reactions.removeAll();
+    message.react('❌');
 	message.reply('Hubo un error al ejecutar ese comando');
     }
     }),
