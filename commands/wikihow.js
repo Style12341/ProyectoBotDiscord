@@ -15,7 +15,6 @@ module.exports = {
             image: {
                 url: wikiH.url,
             },
-
             footer: {
                 text: 'Powered by KSoft.Si.',
             },
