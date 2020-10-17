@@ -1,8 +1,8 @@
 const { KSoftClient } = require('@ksoft/api');
-const { ksoftToken } = require('../token.json');
+const Discord = require('discord.js');
+const ksoftToken = process.env.KSOFT_TOKEN;
 const ksoft = new KSoftClient(ksoftToken);
 const { prefix } = require('../config.json');
-const Discord = require('discord.js');
 module.exports = {
     name: 'random',
     description: 'Devuelve una imagen aleatoria.',

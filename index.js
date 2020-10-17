@@ -2,7 +2,7 @@ const fs = require('fs');              // Libreria File System de JS
 const Discord = require('discord.js'); // Libreria de Discord para JS
 
 const { prefix } = require('./config.json'); // Variables Predefinidas
-const { token } = require('./token.json'); // Variables Predefinidas
+const token = process.env.BOT_TOKEN; // Variables Predefinidas
 
 const client = new Discord.Client();                // Crea un nuevo cliente de discord
 client.commands = new Discord.Collection();         // Crea una nueva "coleccion" es un Map con funciones extras de la libreria de discord
@@ -26,7 +26,10 @@ client.on('message', message => {
     const commandName = args.shift().toLowerCase();                       // Crea una variable command, agarra el primer elemento de un array, lo devuelve y lo elimina para no tener el comando guardado en el array.
     const command = client.commands.get(commandName)                                      // Acorta la funcion de obtener el comando
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName)); // Verififica dentro de los comandos cuales son sus alias para chequear si se introducen
-	if (!command) return;                                                                 // Si el comando o alias no esta en la lista , vuelve.
+	if (!command) {
+        message.reply("No es un comando valido");
+        return ;
+    } ;                                                                 // Si el comando o alias no esta en la lista , vuelve.
     // Condicional que avisa si faltan argumentos para el comando o si fue utilizado incorrectamente
     if (command.args  && !args.length) {
         let reply = `No escribiste argumentos, ${message.author}!`;

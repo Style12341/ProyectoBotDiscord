@@ -19,10 +19,7 @@ module.exports = {
             fields: [
                 {
                     name: 'Comandos de uso general:',
-                    value: 'Some value here',
-                },
-                {
-                    name: 'Comandos de Imagenes:',
+
                     value: 'Some value here',
                 },
             ],
