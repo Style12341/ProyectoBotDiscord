@@ -24,7 +24,6 @@ module.exports = {
             ],
             footer: {
                 text: `Utilize ${prefix}random <tag> \n Powered by KSoft.Si.`,
-                text: `Utilize ${prefix}random <tag>`,
             },
         };
         if (!args.length) {

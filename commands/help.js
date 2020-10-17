@@ -19,6 +19,7 @@ module.exports = {
             fields: [
                 {
                     name: 'Comandos de uso general:',
+
                     value: 'Some value here',
                 },
             ],
@@ -27,7 +28,6 @@ module.exports = {
             },
         };
         if (!args.length) { // Si no se proporcionan argumentos entra al ciclo if que mandará el embed
-       
             data.push(commands.map(command => command.name).join('` `')); // Le asocia al array data los comandos separados por acentos graves para darle formate a las palabras
             helpEmbed.fields[0].value = `\`${data}\``; // Se reemplaza el value del primer campo de texto con lo previamente guardado en el array data , con los acentos graves de inicio y final
             return message.reply({ embed: helpEmbed }); // Envia el embed.
